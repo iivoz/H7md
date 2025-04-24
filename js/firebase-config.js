@@ -1,11 +1,11 @@
 // Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyDemoKeyForTestingPurposesOnly",
-    authDomain: "chat-app-demo.firebaseapp.com",
-    projectId: "chat-app-demo",
-    storageBucket: "chat-app-demo.appspot.com",
-    messagingSenderId: "123456789012",
-    appId: "1:123456789012:web:abcdef0123456789"
+  apiKey: "AIzaSyACSUFO7HRa7N7UiVJvUarKl-rm8V9Ka84",
+  authDomain: "tstapp-8204d.firebaseapp.com",
+  projectId: "tstapp-8204d",
+  storageBucket: "tstapp-8204d.firebasestorage.app",
+  messagingSenderId: "148357944551",
+  appId: "1:148357944551:web:978ac0e7652303817fbe42"
 };
 
 // Initialize Firebase
