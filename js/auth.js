@@ -8,7 +8,6 @@ if (loginForm) {
 
         signInWithEmail(email, password)
             .then((userCredential) => {
-                // Update user status to online
                 return database.ref(`users/${userCredential.user.uid}`).update({
                     status: {
                         state: 'online',
@@ -45,23 +44,19 @@ if (registerForm) {
         }
         
         try {
-            // Create user account
             const userCredential = await createUser(email, password);
             const user = userCredential.user;
             
             let photoURL = null;
             
-            // Upload avatar if provided
             if (avatarFile) {
                 const storageRef = storage.ref(`avatars/${user.uid}/${avatarFile.name}`);
                 await storageRef.put(avatarFile);
                 photoURL = await storageRef.getDownloadURL();
             }
             
-            // Update profile
             await updateProfile(displayName, photoURL);
             
-            // Add user data to database
             await database.ref(`users/${user.uid}`).set({
                 email: email,
                 displayName: displayName,
@@ -73,7 +68,6 @@ if (registerForm) {
                 }
             });
             
-            // Redirect to chat
             window.location.href = 'chat.html';
         } catch (error) {
             console.error('Registration Error:', error);
@@ -82,45 +76,33 @@ if (registerForm) {
     });
 }
 
-// Handle Google Sign In
-const googleSignInBtn = document.getElementById('google-signin');
-if (googleSignInBtn) {
-    googleSignInBtn.addEventListener('click', () => {
-        signInWithGoogle()
-            .then((result) => {
-                const user = result.user;
-                // Update or create user data
-                return database.ref(`users/${user.uid}`).update({
-                    email: user.email,
-                    displayName: user.displayName,
-                    photoURL: user.photoURL,
-                    status: {
-                        state: 'online',
-                        lastChanged: firebase.database.ServerValue.TIMESTAMP
-                    },
-                    lastLogin: firebase.database.ServerValue.TIMESTAMP
+// Password reset
+const forgotPasswordLink = document.getElementById('forgot-password');
+if (forgotPasswordLink) {
+    forgotPasswordLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        const email = prompt('يرجى إدخال بريدك الإلكتروني لإرسال رابط إعادة تعيين كلمة المرور:');
+        if (email) {
+            auth.sendPasswordResetEmail(email)
+                .then(() => {
+                    alert('تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني.');
+                })
+                .catch((error) => {
+                    console.error('Error sending password reset email:', error);
+                    alert('حدث خطأ أثناء إرسال رابط إعادة التعيين: ' + error.message);
                 });
-            })
-            .then(() => {
-                window.location.href = 'chat.html';
-            })
-            .catch((error) => {
-                console.error('Google Sign In Error:', error);
-                alert('خطأ في تسجيل الدخول باستخدام Google: ' + error.message);
-            });
+        }
     });
 }
 
 // Check authentication state
 auth.onAuthStateChanged((user) => {
     if (user) {
-        // User is signed in
         console.log('User is signed in:', user.uid);
         if (window.location.pathname === '/index.html' || window.location.pathname === '/') {
             window.location.href = 'chat.html';
         }
     } else {
-        // User is signed out
         console.log('User is signed out');
         if (window.location.pathname === '/chat.html') {
             window.location.href = 'index.html';
@@ -161,21 +143,14 @@ if (themeToggle) {
 // Set up presence system
 auth.onAuthStateChanged((user) => {
     if (user) {
-        // Create a reference to the user's status
         const userStatusRef = database.ref(`users/${user.uid}/status`);
-        
-        // Create a reference to the special '.info/connected' path
         const connectedRef = database.ref('.info/connected');
-        
         connectedRef.on('value', (snap) => {
             if (snap.val() === true) {
-                // If we lose network then remove all callbacks
                 userStatusRef.onDisconnect().update({
                     state: 'offline',
                     lastChanged: firebase.database.ServerValue.TIMESTAMP
                 });
-                
-                // Set the user's status to online
                 userStatusRef.update({
                     state: 'online',
                     lastChanged: firebase.database.ServerValue.TIMESTAMP
