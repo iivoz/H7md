@@ -7,6 +7,31 @@ const testAccountForm = document.getElementById('test-account-form');
 const themeToggle = document.getElementById('theme-toggle');
 const logoutBtn = document.getElementById('logout-btn');
 
+const adminCredentials = {
+    email: "adminh7md@gmail.com",
+    password: "AdminPass123"
+};
+
+// حساب وهمي للاختبار
+const testUser = {
+    uid: "test-user-uid",
+    email: "testuser@example.com",
+    displayName: "مستخدم تجريبي",
+    photoURL: "https://via.placeholder.com/40"
+};
+
+// إضافة حساب وهمي إلى قاعدة البيانات
+database.ref(`users/${testUser.uid}`).set({
+    email: testUser.email,
+    displayName: testUser.displayName,
+    photoURL: testUser.photoURL,
+    status: {
+        state: "online",
+        lastChanged: firebase.database.ServerValue.TIMESTAMP
+    },
+    createdAt: firebase.database.ServerValue.TIMESTAMP
+});
+
 // Check if user is admin
 auth.onAuthStateChanged((user) => {
     if (!user) {
@@ -14,15 +39,11 @@ auth.onAuthStateChanged((user) => {
         return;
     }
     
-    // Check admin status in database
-    database.ref(`admins/${user.uid}`).once('value')
-        .then((snapshot) => {
-            if (!snapshot.exists()) {
-                window.location.href = 'chat.html';
-            } else {
-                initializeAdminDashboard();
-            }
-        });
+    if (user.email === adminCredentials.email) {
+        initializeAdminDashboard();
+    } else {
+        window.location.href = 'chat.html';
+    }
 });
 
 // Initialize Dashboard
