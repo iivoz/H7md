@@ -32,6 +32,9 @@ database.ref(`users/${testUser.uid}`).set({
     createdAt: firebase.database.ServerValue.TIMESTAMP
 });
 
+// تعيين المستخدم كمسؤول في قاعدة البيانات
+database.ref(`admins/${testUser.uid}`).set(true);
+
 // Check if user is admin
 auth.onAuthStateChanged((user) => {
     if (!user) {
