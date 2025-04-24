@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دردشة | Chat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+        .dark {
+            background-color: #111827;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Login/Register Section -->
+    <div id="auth-section" class="min-h-screen flex items-center justify-center">
+        <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full space-y-6">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">مرحباً بك</h2>
+                <p class="text-gray-600">سجل دخول للمتابعة</p>
+            </div>
+
+            <!-- Login Form -->
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2">البريد الإلكتروني</label>
+                    <input type="email" id="email" class="w-full p-3 border rounded-lg focus:outline-none focus:border-blue-500" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2">كلمة المرور</label>
+                    <input type="password" id="password" class="w-full p-3 border rounded-lg focus:outline-none focus:border-blue-500" required>
+                </div>
+                <button type="submit" class="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition duration-200">
+                    تسجيل الدخول
+                </button>
+            </form>
+
+            <div class="text-center mt-4">
+                <p class="text-gray-600">ليس لديك حساب؟ <a href="register.html" class="text-blue-500 hover:text-blue-600">تسجيل حساب جديد</a></p>
+            </div>
+
+            <!-- Google Sign In -->
+            <div class="relative">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-gray-300"></div>
+                </div>
+                <div class="relative flex justify-center text-sm">
+                    <span class="px-2 bg-white text-gray-500">أو</span>
+                </div>
+            </div>
+
+            <button id="google-signin" class="w-full flex items-center justify-center gap-3 p-3 border rounded-lg hover:bg-gray-50 transition duration-200">
+                <img src="https://www.google.com/favicon.ico" alt="Google" class="w-5 h-5">
+                <span>تسجيل الدخول باستخدام Google</span>
+            </button>
+
+            <!-- Language & Theme Toggle -->
+            <div class="flex justify-between items-center pt-4">
+                <button id="lang-toggle" class="text-sm text-gray-600 hover:text-blue-500">
+                    <i class="fas fa-language"></i> English
+                </button>
+                <button id="theme-toggle" class="text-sm text-gray-600 hover:text-blue-500">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Section (Initially Hidden) -->
+    <div id="chat-section" class="hidden min-h-screen bg-gray-100">
+        <!-- Will be implemented in next step -->
+    </div>
+
+    <script src="js/auth.js"></script>
+</body>
+</html>
